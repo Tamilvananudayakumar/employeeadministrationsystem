@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<form action="list.html">
+  <input type="hidden" id="id">
+  <label>Employee Name</label><input type="text" id="name">
+  <label>Address1</label><input type="text" id="address1">
+  <label>Address2</label><input type="text" id="address2">
+  <label>City</label><input type="text" id="city">
+  <input type="button" value="INSERT" onclick="insert()">
+  <input type="submit" value="EMPLOYEE DB">
+</form>
+<script>
+  function insert(){
+    var id=$('#id').val();
+    var name=$('#name').val();
+    var address1=$('#address1').val();
+    var address2=$('#address2').val();
+    var city=$('#city').val();
+    var employeeData={
+      employeeId:id,
+      employeeName:name,
+      address1:address1,
+      address2:address2,
+      city:city
+    }
+    if((!id && !name && !address1 && !address2 && !city)){
+        alert("Insert all Values");
+        return;
+    }
+    $.ajax({
+      url:"http://localhost:8080/Employee/add",
+      type:'POST',
+      contentType:'application/json',
+      data:JSON.stringify(employeeData),
+      success:function (){
+        window.location.href="list.html";
+      }
+    })
+  }
+</script>
+</body>
+</html>

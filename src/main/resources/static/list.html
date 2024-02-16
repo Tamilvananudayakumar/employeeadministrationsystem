@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<h3>EMPLOYEE DB</h3>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <td><b>ID</b></td>
+        <td><b>Employee Name</b></td>
+        <td><b>Address 1</b></td>
+        <td><b>Address 2</b></td>
+        <td><b>City</b></td>
+        <td><b>Action</b></td>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+</table>
+<button class="btn btn-primary" onclick="home()">INSERT</button>
+
+<script>
+    function home(){
+        window.location.href="index.html";
+    }
+    $(document).ready(function (){
+        view();
+    })
+    function view(){
+        $.ajax({
+            url:"http://localhost:8080/Employee/getAll",
+            type:'GET',
+            success:function (employee){
+                var tableBody=$('#tbody').empty();
+                employee.forEach(function (emp){
+                    var employeeTable= '<tr>'+
+                        '<td>'+emp.employeeId+'</td>'+
+                        '<td>'+emp.employeeName+'</td>'+
+                        '<td>'+emp.address1+'</td>'+
+                        '<td>'+emp.address2+'</td>'+
+                        '<td>'+emp.city+'</td>'+
+                        '<td>'+
+                        '<button class="btn btn-danger" onclick="deleteEmployee('+emp.employeeId+')">DELETE</button>'+
+                        '<button class="btn btn-primary" onclick="updateteEmployee('+emp.employeeId+')">UPDATE</button>'+
+                        '</td>'+
+                    '</tr>';
+                    tableBody.append(employeeTable);
+                })
+            }
+        })
+    }
+    function deleteEmployee(employeeID){
+        if(confirm("This Data will be Deleted")){
+            $.ajax({
+                url: "http://localhost:8080/Employee/deleteById/"+employeeID,
+                type: 'DELETE',
+                success:function (){
+                    view();
+                }
+            })
+        }
+    }
+    function updateteEmployee(employeeID){
+        localStorage.setItem("empId",employeeID);
+        window.location.href="update.html";
+    }
+</script>
+</body>
+</html>
